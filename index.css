@@ -77,13 +77,52 @@ input[type=number] {
 
 }
 
+
+.stack {
+  position:relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  }
+
+.stack canvas {
+  position:absolute;
+  display: flex;
+  top: 5vh;
+  left: 5vw;
+  }
+
+.stack div.y-text {
+  position:absolute;
+  top: 14vh;
+  left: 27vw;
+}
+
+.stack div.x-text {
+  position:absolute;
+  top: 27vh;
+  left: 35vw;
+}
+
+.stack div.one-text {
+  position:absolute;
+  top: 27vh;
+  left: 28vw;
+}
+
+.stack div.zero-text {
+  position:absolute;
+  top: 27vh;
+  left: 26vw;
+}
+
 .tools {
   display: flex;
   flex-direction: column;
   justify-content: end;
   align-items: flex-end;
   gap: 20px;
-  /* min-width: 20%; */
+  margin: 5vh 50vh;
 }
 
 .tool-wrapper {

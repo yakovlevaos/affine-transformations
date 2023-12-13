@@ -1,16 +1,35 @@
 //зададим начальные координаты для расположения фигуры на холсте по варианту
 initCoordinates = [
   [0, -1, 1],
-  [-3, -2, 1],
-  [-3, 4, 1],
-  [0, 3, 1],
-  [3, 4, 1],
   [3, -2, 1],
-  [0, -1, 1],
+  [3, 4, 1],
+  [0, 3, 1],
+  [-3, 4, 1],
+  [-3, -2, 1],
+];
+
+//начальные координаты для осей координат
+initCoordinatesBack = [
+  [0, -6, 1],
+  [0.01, 6, 1],
+  [-0.2, 5.5, 1],
+  [0.2, 5.5, 1],
+  [0, 6, 1],
+  [0, 0, 1],
+  [-1, 0, 1],
+  [-1, 0.2, 1],
+  [-1, -0.2, 1],
+  [-1, 0, 1],
+  [-5.99, 0, 1],
+  [-5.5, -0.2, 1],
+  [-5.5, 0.2, 1],
+  [-6, 0, 1],
+  [6, 0, 1],
 ];
 
 //копируем координаты для выполнения преобразований, начальные координаты понадобятся при возвращении фигуры в исходное
 let workCoordinates = initCoordinates;
+let workCoordinatesBack = initCoordinatesBack;
 
 //зададим нулевые точки фигуры
 widthZero = 300;
@@ -30,6 +49,22 @@ const paint = (c, p) => {
     object["y" + (i + 1)] = p[i][1];
   }
 
+  c.drawLine(object);
+};
+
+//и систему координат под фигуру
+const paintBack = (c, p) => {
+  const object = {
+    strokeStyle: "#000",
+    strokeWidth: 1,
+    rounded: false,
+    closed: false,
+  };
+
+  for (let i = 0; i < p.length; i += 1) {
+    object["x" + (i + 1)] = p[i][0];
+    object["y" + (i + 1)] = p[i][1];
+  }
   c.drawLine(object);
 };
 
@@ -92,10 +127,22 @@ const returnToDefaultState = (a, b) => {
 
 //подготовим начальное состояние фигуры, зададим координаты для работы и отрисуем фигуру в канве
 $(document).ready(() => {
+  const canvas = document.getElementById("background-canvas"),
+    topCanvas = document.getElementById("canvas");
   workCoordinates = dilatation(workCoordinates, 20, 20);
   workCoordinates = translation(workCoordinates, widthZero, heightZero);
   workCoordinates = rotation(workCoordinates, 180, widthZero, heightZero);
+  workCoordinatesBack = dilatation(workCoordinatesBack, 20, 20);
+  workCoordinatesBack = translation(workCoordinatesBack, widthZero, heightZero);
+  workCoordinatesBack = rotation(
+    workCoordinatesBack,
+    180,
+    widthZero,
+    heightZero
+  );
+  canvas.parentNode.insertBefore(canvas, topCanvas);
   paint($("#canvas"), workCoordinates);
+  paintBack($("#background-canvas"), workCoordinatesBack);
 
   //процесс поворота
   $("#rotate").click(() => {
@@ -111,6 +158,7 @@ $(document).ready(() => {
     let dilateAbscissa = $(".parameters .dilatate-abscissa").val();
     let dilateOrdinate = $(".parameters .dilatate-ordinate").val();
     workCoordinates = translation(workCoordinates, -widthZero, -heightZero);
+
     workCoordinates = dilatation(
       workCoordinates,
       dilateAbscissa,
@@ -136,7 +184,9 @@ $(document).ready(() => {
   //процесс отражения
   $("#mirror-reflect").click(() => {
     $("#canvas").clearCanvas();
+    workCoordinates = translation(workCoordinates, -widthZero, -heightZero);
     workCoordinates = mirrorReflecttion(workCoordinates);
+    workCoordinates = translation(workCoordinates, widthZero, heightZero);
     paint($("#canvas"), workCoordinates);
   });
 
